@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Summit — Guiadas & Experiencias en la Naturaleza</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --stone:   #1a1814;
+      --rock:    #2e2a25;
+      --dust:    #6b6355;
+      --sand:    #c9b99a;
+      --cream:   #f0ebe2;
+      --glacier: #7ab8b0;
+      --gold:    #c8952a;
+      --gold-lt: #e8b84b;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--stone); color: var(--cream); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 3rem; background: linear-gradient(to bottom, rgba(26,24,20,.92), transparent); backdrop-filter: blur(2px); }
+    .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.5rem; letter-spacing: .2em; color: var(--gold-lt); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: .85rem; letter-spacing: .15em; text-transform: uppercase; color: var(--sand); text-decoration: none; transition: color .25s; }
+    .nav-links a:hover { color: var(--gold-lt); }
+    .nav-lang { font-family: 'Barlow Condensed', sans-serif; font-size: .8rem; letter-spacing: .12em; color: var(--dust); cursor: pointer; background: none; border: 1px solid var(--dust); padding: .3rem .7rem; transition: all .25s; }
+    .nav-lang:hover { color: var(--gold-lt); border-color: var(--gold-lt); }
+
+    /* HERO */
+    .hero { position: relative; height: 100vh; min-height: 650px; display: flex; align-items: flex-end; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0;     background: linear-gradient(160deg, rgba(26,24,20,.3) 0%, rgba(26,24,20,.9) 100%), linear-gradient(to bottom, rgba(26,24,20,.5) 0%, rgba(26,24,20,.2) 40%, rgba(26,24,20,.85) 100%), url('https://i.ibb.co/B5FZGXCK/IMG-20240111-100952-977.jpg') center/cover no-repeat; transform: scale(1.04); animation: heroZoom 18s ease-out forwards; }
+    @keyframes heroZoom { from { transform: scale(1.04); } to { transform: scale(1.0); } }
+    .hero-content { position: relative; z-index: 2; padding: 0 3rem 6rem; max-width: 780px; opacity: 0; animation: fadeUp .9s .3s ease forwards; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-tag { font-family: 'Barlow Condensed', sans-serif; font-size: .78rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; display: flex; align-items: center; gap: .8rem; }
+    .hero-tag::before { content: ''; display: block; width: 40px; height: 1px; background: var(--gold); }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem, 7vw, 6.5rem); font-weight: 900; line-height: .95; color: var(--cream); margin-bottom: 1.5rem; }
+    .hero h1 em { font-style: italic; color: var(--glacier); }
+    .hero-sub { font-size: 1.05rem; font-weight: 300; line-height: 1.7; color: var(--sand); max-width: 480px; margin-bottom: 2.5rem; }
+    .btn-primary { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: .85rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--stone); background: var(--gold); padding: 1rem 2.4rem; text-decoration: none; transition: background .25s, transform .2s; border: none; cursor: pointer; }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-2px); }
+    .btn-outline { display: inline-block; margin-left: 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: .85rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--cream); border: 1px solid rgba(240,235,226,.35); padding: 1rem 2.4rem; text-decoration: none; transition: all .25s; }
+    .btn-outline:hover { border-color: var(--cream); background: rgba(240,235,226,.07); }
+    .hero-scroll { position: absolute; bottom: 2.5rem; right: 3rem; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .5rem; font-family: 'Barlow Condensed', sans-serif; font-size: .7rem; letter-spacing: .2em; color: var(--dust); writing-mode: vertical-rl; animation: fadeUp .9s .8s ease forwards; opacity: 0; }
+    .hero-scroll::after { content: ''; display: block; width: 1px; height: 50px; background: linear-gradient(to bottom, var(--dust), transparent); }
+
+    /* STATS */
+    .stats-bar { background: var(--rock); display: flex; justify-content: space-around; padding: 2rem 3rem; border-top: 1px solid rgba(200,149,42,.2); border-bottom: 1px solid rgba(200,149,42,.2); flex-wrap: wrap; gap: 1.5rem; }
+    .stat-item { text-align: center; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; color: var(--gold-lt); line-height: 1; }
+    .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dust); margin-top: .3rem; }
+
+    /* SECTIONS */
+    section { padding: 7rem 3rem; }
+    .section-tag { font-family: 'Barlow Condensed', sans-serif; font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: .8rem; }
+    .section-tag::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; line-height: 1.1; color: var(--cream); margin-bottom: 1.2rem; }
+    .section-title em { font-style: italic; color: var(--glacier); }
+    .section-body { font-size: 1rem; font-weight: 300; line-height: 1.8; color: var(--sand); max-width: 520px; }
+
+    /* ABOUT */
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+    .about-img { position: relative; }
+    .about-img img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+    .about-img-accent { position: absolute; bottom: -1.5rem; right: -1.5rem; width: 55%; aspect-ratio: 1; border: 2px solid var(--gold); z-index: -1; }
+    .about-badge { position: absolute; top: 1.5rem; left: -1.5rem; background: var(--gold); color: var(--stone); font-family: 'Barlow Condensed', sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; padding: .6rem 1rem; }
+    .about-creds { margin-top: 2.5rem; display: flex; flex-direction: column; gap: .9rem; }
+    .cred-item { display: flex; align-items: flex-start; gap: 1rem; padding-bottom: .9rem; border-bottom: 1px solid rgba(107,99,85,.3); }
+    .cred-icon { font-size: 1.1rem; color: var(--gold); margin-top: .1rem; flex-shrink: 0; }
+    .cred-text { font-size: .9rem; color: var(--sand); line-height: 1.5; }
+    .cred-text strong { color: var(--cream); font-weight: 500; display: block; }
+
+    /* SERVICES */
+    #servicios { background: var(--rock); }
+    .services-header { max-width: 1200px; margin: 0 auto 4rem; }
+    .services-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: rgba(107,99,85,.2); }
+    .service-card { background: var(--rock); position: relative; overflow: hidden; cursor: pointer; }
+    .service-card-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; transition: transform .6s ease; filter: brightness(.7) saturate(.8); }
+    .service-card:hover .service-card-img { transform: scale(1.05); filter: brightness(.55) saturate(1); }
+    .service-card-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem 1.8rem; background: linear-gradient(to top, rgba(26,24,20,.95) 0%, transparent 100%); }
+    .service-num { font-family: 'Barlow Condensed', sans-serif; font-size: .68rem; letter-spacing: .25em; color: var(--gold); }
+    .service-name { font-family: 'Playfair Display', serif; font-size: 1.55rem; font-weight: 700; color: var(--cream); margin: .3rem 0 .6rem; }
+    .service-desc { font-size: .85rem; color: var(--sand); line-height: 1.6; max-height: 0; overflow: hidden; transition: max-height .4s ease, opacity .4s ease; opacity: 0; }
+    .service-card:hover .service-desc { max-height: 80px; opacity: 1; }
+    .service-arrow { display: inline-block; margin-top: .8rem; font-family: 'Barlow Condensed', sans-serif; font-size: .75rem; letter-spacing: .15em; color: var(--gold); opacity: 0; transition: opacity .3s; }
+    .service-card:hover .service-arrow { opacity: 1; }
+
+    /* EXPERIENCE */
+    #experiencia { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr; gap: 6rem; align-items: center; }
+    .exp-features { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .exp-feature { display: flex; gap: 1.2rem; align-items: flex-start; padding: 1.3rem 1.5rem; border-left: 2px solid transparent; transition: border-color .3s, background .3s; }
+    .exp-feature:hover { border-left-color: var(--gold); background: rgba(200,149,42,.05); }
+    .exp-feature-icon { font-size: 1.4rem; color: var(--glacier); flex-shrink: 0; }
+    .exp-feature-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 600; letter-spacing: .05em; color: var(--cream); margin-bottom: .3rem; }
+    .exp-feature-text { font-size: .88rem; color: var(--sand); line-height: 1.6; }
+    .exp-visual { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+    .exp-visual img { width: 100%; object-fit: cover; display: block; }
+    .exp-visual img:first-child { grid-column: 1 / -1; aspect-ratio: 16/9; }
+    .exp-visual img:nth-child(2), .exp-visual img:nth-child(3) { aspect-ratio: 1; }
+
+    /* GRUPOS */
+    #grupos { background: #111009; }
+    .grupos-inner { max-width: 1200px; margin: 0 auto; }
+    .grupos-header { margin-bottom: 4rem; }
+    .grupos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; background: rgba(107,99,85,.15); margin-bottom: 1.5px; }
+    .grupo-card { position: relative; overflow: hidden; cursor: pointer; }
+    .grupo-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform .6s ease; filter: brightness(.6) saturate(.85); }
+    .grupo-card:hover img { transform: scale(1.04); filter: brightness(.45) saturate(1); }
+    .grupo-card-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.8rem; background: linear-gradient(to top, rgba(17,16,9,.95), transparent); }
+    .grupo-card-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--cream); margin-bottom: .4rem; }
+    .grupo-card-text { font-size: .85rem; color: var(--sand); line-height: 1.5; max-height: 0; overflow: hidden; transition: max-height .4s, opacity .4s; opacity: 0; }
+    .grupo-card:hover .grupo-card-text { max-height: 60px; opacity: 1; }
+    .grupos-cta { background: rgba(200,149,42,.08); border: 1px solid rgba(200,149,42,.2); padding: 2.5rem 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .grupos-cta-text { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; color: var(--cream); }
+    .grupos-cta-sub { font-size: .9rem; color: var(--sand); margin-top: .4rem; }
+    .pillars { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 2.5rem 0; }
+    .pillar { display: flex; align-items: center; gap: .6rem; font-family: 'Barlow Condensed', sans-serif; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sand); }
+    .pillar-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+    /* QUOTE */
+    .quote-section { padding: 6rem 3rem;     background: linear-gradient(rgba(26,24,20,.82), rgba(26,24,20,.82)), url('https://i.ibb.co/chv4mkC7/IMG-20230321-110746-188.webp') center/cover fixed; text-align: center; }
+    .quote-text { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3.5vw, 2.8rem); font-weight: 400; font-style: italic; color: var(--cream); line-height: 1.4; max-width: 800px; margin: 0 auto 1.5rem; }
+    .quote-author { font-family: 'Barlow Condensed', sans-serif; font-size: .8rem; letter-spacing: .25em; color: var(--gold); text-transform: uppercase; }
+
+    /* CONTACT */
+    #contacto { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-details { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-detail { display: flex; gap: 1rem; align-items: flex-start; }
+    .contact-detail-icon { color: var(--gold); font-size: 1rem; margin-top: .15rem; }
+    .contact-detail-text { font-size: .95rem; color: var(--sand); line-height: 1.5; }
+    .contact-detail-text strong { color: var(--cream); font-weight: 500; display: block; }
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: .4rem; }
+    .form-field label { font-family: 'Barlow Condensed', sans-serif; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dust); }
+    .form-field input, .form-field select, .form-field textarea { background: rgba(46,42,37,.7); border: 1px solid rgba(107,99,85,.4); color: var(--cream); padding: .85rem 1rem; font-family: 'Barlow', sans-serif; font-size: .9rem; font-weight: 300; outline: none; transition: border-color .25s; resize: vertical; }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--gold); }
+    .form-field select option { background: var(--rock); }
+    .form-submit { margin-top: .5rem; text-align: right; }
+
+    /* FOOTER */
+    footer { background: #111009; padding: 3rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(107,99,85,.2); }
+    .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: .2em; color: var(--gold-lt); }
+    .footer-copy { font-size: .78rem; color: var(--dust); }
+    .footer-social { display: flex; gap: 1.2rem; }
+    .footer-social a { font-family: 'Barlow Condensed', sans-serif; font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: var(--dust); text-decoration: none; transition: color .25s; }
+    .footer-social a:hover { color: var(--gold-lt); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .about { grid-template-columns: 1fr; gap: 3rem; }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      #experiencia { grid-template-columns: 1fr; gap: 3rem; }
+      #contacto { grid-template-columns: 1fr; gap: 3rem; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+      .grupos-grid { grid-template-columns: 1fr; }
+      .grupos-cta { flex-direction: column; }
+    }
+    @media (max-width: 600px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .hero-content { padding: 0 1.5rem 5rem; }
+      .hero-scroll { display: none; }
+      .btn-outline { margin-left: 0; margin-top: .8rem; display: block; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">SUMMIT</a>
+  <ul class="nav-links">
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#experiencia">Experiencia</a></li>
+    <li><a href="#grupos">Grupos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <button class="nav-lang" onclick="toggleLang()">EN / ES</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag" data-es="Argentina · Naturaleza & Montaña" data-en="Argentina · Nature & Mountain">Argentina · Naturaleza & Montaña</div>
+    <h1>Donde la<br>montaña te<br><em>transforma.</em></h1>
+    <p class="hero-sub" data-es="Guiadas premium en los paisajes más impresionantes de Argentina. Senderismo, escalada, trail running y experiencias en glaciares con guías certificados." data-en="Premium guided experiences in Argentina's most breathtaking landscapes. Trekking, climbing, trail running and glacier experiences with certified guides.">
+      Guiadas premium en los paisajes más impresionantes de Argentina. Senderismo, escalada, trail running y experiencias en glaciares con guías certificados.
+    </p>
+    <a href="#servicios" class="btn-primary" data-es="Ver Experiencias" data-en="See Experiences">Ver Experiencias</a>
+    <a href="#grupos" class="btn-outline" data-es="Para grupos & comunidades" data-en="For groups & communities">Para grupos & comunidades</a>
+  </div>
+  <div class="hero-scroll" data-es="Explorar" data-en="Explore">Explorar</div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stat-item">
+    <div class="stat-num">10+</div>
+    <div class="stat-label" data-es="Años de experiencia" data-en="Years of experience">Años de experiencia</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">500+</div>
+    <div class="stat-label" data-es="Clientes guiados" data-en="Clients guided">Clientes guiados</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">✦</div>
+    <div class="stat-label" data-es="Guías certificados" data-en="Certified guides">Guías certificados</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">✦</div>
+    <div class="stat-label" data-es="Grupos pequeños & cupos limitados" data-en="Small groups & limited spots">Grupos pequeños & cupos limitados</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="nosotros">
+  <div class="about">
+    <div class="about-img reveal">
+      <img src="https://i.ibb.co/cXK6mDPr/1673392937632-01-01.jpg" alt="Carpa en la nieve" />
+    </div>
+    <div class="about-text reveal">
+      <div class="section-tag" data-es="Sobre Nosotros" data-en="About Us">Sobre Nosotros</div>
+      <h2 class="section-title" data-es="La montaña no es solo un destino.<br><em>Es una forma de vida.</em>" data-en="The mountain isn't just a destination.<br><em>It's a way of life.</em>">La montaña no es solo un destino.<br><em>Es una forma de vida.</em></h2>
+      <p class="section-body" data-es="Somos guías de montaña certificados con salidas desde Buenos Aires hacia los paisajes más salvajes de Argentina. Conocemos cada ruta, cada cumbre y cada glaciar con la profundidad de quien los habita, y esa pasión es la que volcamos en cada experiencia." data-en="We are certified mountain guides offering departures from Buenos Aires to Argentina's wildest landscapes. We know each route, each summit and each glacier with the depth of those who truly live them — and that passion is what we pour into every experience.">
+        Somos guías de montaña certificados con salidas desde Buenos Aires hacia los paisajes más salvajes de Argentina. Conocemos cada ruta, cada cumbre y cada glaciar con la profundidad de quien los habita, y esa pasión es la que volcamos en cada experiencia.
+      </p>
+      <div class="about-creds">
+        <div class="cred-item">
+          <div class="cred-icon">🧊</div>
+          <div class="cred-text">
+            <strong data-es="Guía en Glaciar Perito Moreno" data-en="Perito Moreno Glacier Guide">Guía en Glaciar Perito Moreno</strong>
+            <span data-es="Experiencia guiando en uno de los glaciares más imponentes del mundo." data-en="Experience guiding on one of the world's most imposing glaciers.">Experiencia guiando en uno de los glaciares más imponentes del mundo.</span>
+          </div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-icon">⛰️</div>
+          <div class="cred-text">
+            <strong data-es="Aconcagua & El Chaltén" data-en="Aconcagua & El Chaltén">Aconcagua & El Chaltén</strong>
+            <span data-es="Rutas de alta montaña y trekking icónico en algunos de los escenarios más desafiantes de los Andes." data-en="High-mountain routes and iconic trekking in some of the Andes' most challenging landscapes.">Rutas de alta montaña y trekking icónico en los escenarios más desafiantes de los Andes.</span>
+          </div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-icon">🏃</div>
+          <div class="cred-text">
+            <strong data-es="Trail Running competitivo" data-en="Competitive Trail Running">Trail Running competitivo</strong>
+            <span data-es="Corredor con participación en ultras y carreras de montaña de Argentina. La montaña también se corre." data-en="Runner with participation in ultras and mountain races across Argentina. The mountain can also be run.">Corredor con participación en ultras y carreras de montaña de Argentina.</span>
+          </div>
+        </div>
+        <div class="cred-item">
+          <div class="cred-icon">🚌</div>
+          <div class="cred-text">
+            <strong data-es="Salidas organizadas desde Buenos Aires" data-en="Organized departures from Buenos Aires">Salidas organizadas desde Buenos Aires</strong>
+            <span data-es="Logística completa para que solo tengas que ocuparte de disfrutar." data-en="Full logistics so the only thing you need to do is enjoy.">Logística completa para que solo tengas que ocuparte de disfrutar.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios">
+  <div class="services-header reveal">
+    <div class="section-tag" data-es="Lo que ofrecemos" data-en="What We Offer">Lo que ofrecemos</div>
+    <h2 class="section-title" data-es="Nuestras <em>Experiencias</em>" data-en="Our <em>Experiences</em>">Nuestras <em>Experiencias</em></h2>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <img class="service-card-img" src="https://i.ibb.co/sJHrYZpP/IMG-4270-01.jpg" alt="Senderismo y Trekking" />
+      <div class="service-card-body">
+        <div class="service-num">01</div>
+        <div class="service-name" data-es="Senderismo & Trekking" data-en="Hiking & Trekking">Senderismo & Trekking</div>
+        <div class="service-desc" data-es="Recorridos desde media jornada hasta expediciones de varios días por los paisajes más impresionantes de Argentina." data-en="Routes from half-day to multi-day expeditions through Argentina's most breathtaking landscapes.">Recorridos desde media jornada hasta expediciones de varios días por los paisajes más impresionantes de Argentina.</div>
+        <div class="service-arrow" data-es="Conocer más →" data-en="Learn more →">Conocer más →</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://i.ibb.co/0RKjcqx8/IMG-20230901-183803391.jpg" alt="Escalada" />
+      <div class="service-card-body">
+        <div class="service-num">02</div>
+        <div class="service-name" data-es="Escalada" data-en="Climbing">Escalada</div>
+        <div class="service-desc" data-es="Escalada en roca y hielo para todos los niveles, desde iniciación hasta rutas técnicas en paredes icónicas." data-en="Rock and ice climbing for all levels, from beginner to technical routes on iconic walls.">Escalada en roca y hielo para todos los niveles, desde iniciación hasta rutas técnicas en paredes icónicas.</div>
+        <div class="service-arrow" data-es="Conocer más →" data-en="Learn more →">Conocer más →</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <img class="service-card-img" src="https://i.ibb.co/ZzRpjM9R/428-a0447ae4-e4b1-4118-b188-ddb53a327a15-154803.jpg" alt="Trail Running" />
+      <div class="service-card-body">
+        <div class="service-num">03</div>
+        <div class="service-name" data-es="Trail Running" data-en="Trail Running">Trail Running</div>
+        <div class="service-desc" data-es="Salidas guiadas y clínicas de trail running en terrenos espectaculares, con un guía que también corre y conoce cada sendero." data-en="Guided runs and trail running clinics on spectacular terrain, led by a guide who runs and knows every trail.">Salidas guiadas y clínicas de trail running con un guía que también corre y conoce cada sendero.</div>
+        <div class="service-arrow" data-es="Conocer más →" data-en="Learn more →">Conocer más →</div>
+      </div>
+    </div>
+    <div class="service-card" style="grid-column: 1 / -1;">
+      <img class="service-card-img" style="aspect-ratio: 16/10; object-position: center 40%;" src="https://res.cloudinary.com/dv8qu3xr6/image/upload/f_auto,q_auto/5016_iroa4b" alt="Glaciar Perito Moreno" />
+      <div class="service-card-body">
+        <div class="service-num">04</div>
+        <div class="service-name" data-es="Experiencias en Glaciares" data-en="Glacier Experiences">Experiencias en Glaciares</div>
+        <div class="service-desc" data-es="Trekking sobre hielo, travesías y exploraciones en el Glaciar Perito Moreno y otros glaciares de Argentina." data-en="Ice trekking, crossings and explorations on Perito Moreno Glacier and other Argentine glaciers.">Trekking sobre hielo, travesías y exploraciones en el Glaciar Perito Moreno y otros glaciares de Argentina.</div>
+        <div class="service-arrow" data-es="Conocer más →" data-en="Learn more →">Conocer más →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section>
+  <div id="experiencia">
+    <div class="reveal">
+      <div class="section-tag" data-es="Por qué elegirnos" data-en="Why Choose Us">Por qué elegirnos</div>
+      <h2 class="section-title" data-es="Una experiencia <em>diferente</em>" data-en="A <em>different</em> experience">Una experiencia <em>diferente</em></h2>
+      <p class="section-body" data-es="No somos una agencia de turismo. Somos montañistas y corredores que diseñan cada salida con el mismo cuidado, la misma atención al detalle y la misma pasión con la que nosotros mismos querríamos vivirla." data-en="We're not a tourism agency. We are mountaineers and runners who design every outing with the same care, attention to detail and passion with which we ourselves would want to live it.">
+        No somos una agencia de turismo. Somos montañistas y corredores que diseñan cada salida con el mismo cuidado, la misma atención al detalle y la misma pasión con la que nosotros mismos querríamos vivirla.
+      </p>
+      <div class="exp-features">
+        <div class="exp-feature">
+          <div class="exp-feature-icon">🎯</div>
+          <div>
+            <div class="exp-feature-title" data-es="Experiencias a medida" data-en="Tailored Experiences">Experiencias a medida</div>
+            <div class="exp-feature-text" data-es="Cada salida se planifica en base al nivel, condición física y objetivos de cada persona." data-en="Every outing is planned based on each person's level, fitness and goals.">Cada salida se planifica en base al nivel, condición física y objetivos de cada persona.</div>
+          </div>
+        </div>
+        <div class="exp-feature">
+          <div class="exp-feature-icon">🛡️</div>
+          <div>
+            <div class="exp-feature-title" data-es="Seguridad sin compromisos" data-en="Uncompromised Safety">Seguridad sin compromisos</div>
+            <div class="exp-feature-text" data-es="Guías certificados, equipamiento de primer nivel y protocolos de seguridad estrictos en cada salida." data-en="Certified guides, top-tier equipment and strict safety protocols on every outing.">Guías certificados, equipamiento de primer nivel y protocolos de seguridad estrictos.</div>
+          </div>
+        </div>
+        <div class="exp-feature">
+          <div class="exp-feature-icon">🚌</div>
+          <div>
+            <div class="exp-feature-title" data-es="Logística desde Buenos Aires" data-en="Logistics from Buenos Aires">Logística desde Buenos Aires</div>
+            <div class="exp-feature-text" data-es="Organizamos todo para que puedas conocer Argentina sin preocuparte por nada más que disfrutar." data-en="We organize everything so you can explore Argentina without worrying about anything but enjoying.">Organizamos todo para que puedas conocer Argentina sin preocuparte por nada más que disfrutar.</div>
+          </div>
+        </div>
+        <div class="exp-feature">
+          <div class="exp-feature-icon">🌍</div>
+          <div>
+            <div class="exp-feature-title" data-es="Bilingüe" data-en="Bilingual">Bilingüe</div>
+            <div class="exp-feature-text" data-es="Atención y guiadas en español e inglés para viajeros nacionales e internacionales." data-en="Service and guiding in Spanish and English for national and international travelers.">Atención y guiadas en español e inglés para viajeros nacionales e internacionales.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="exp-visual reveal">
+      <img src="https://i.ibb.co/hFqDF8PJ/IMG-20230122-192919-808.webp" alt="Aconcagua" />
+      <img src="https://i.ibb.co/B5FZGXCK/IMG-20240111-100952-977.jpg" alt="Aconcagua 2" />
+      <img src="https://i.ibb.co/hFqDF8PJ/IMG-20230122-192919-808.webp" alt="Aconcagua 3" />
+    </div>
+  </div>
+</section>
+
+<!-- GRUPOS -->
+<section id="grupos">
+  <div class="grupos-inner">
+    <div class="grupos-header reveal">
+      <div class="section-tag" data-es="Gimnasios · Running · CrossFit" data-en="Gyms · Running · CrossFit">Gimnasios · Running · CrossFit</div>
+      <h2 class="section-title" data-es="Tu grupo ya entrena junto.<br><em>Ahora desafíense de verdad.</em>" data-en="Your group already trains together.<br><em>Now truly challenge yourselves.</em>">Tu grupo ya entrena junto.<br><em>Ahora desafíense de verdad.</em></h2>
+      <p class="section-body" data-es="Diseñamos experiencias para comunidades que buscan algo más que una salida. Un desafío físico real en plena naturaleza, trabajo en equipo en terrenos que no perdonan, y esa motivación nueva que solo aparece cuando superás algo que no sabías que podías." data-en="We design experiences for communities that want more than just an outing. A real physical challenge in the heart of nature, teamwork on unforgiving terrain, and that new motivation that only comes when you overcome something you didn't know you could.">
+        Diseñamos experiencias para comunidades que buscan algo más que una salida. Un desafío físico real en plena naturaleza, trabajo en equipo en terrenos que no perdonan, y esa motivación nueva que solo aparece cuando superás algo que no sabías que podías.
+      </p>
+      <div class="pillars">
+        <div class="pillar"><div class="pillar-dot"></div><span data-es="Desafío físico real" data-en="Real physical challenge">Desafío físico real</span></div>
+        <div class="pillar"><div class="pillar-dot"></div><span data-es="Trabajo en equipo" data-en="Teamwork">Trabajo en equipo</span></div>
+        <div class="pillar"><div class="pillar-dot"></div><span data-es="Nueva motivación" data-en="New motivation">Nueva motivación</span></div>
+        <div class="pillar"><div class="pillar-dot"></div><span data-es="Experiencia grupal única" data-en="Unique group experience">Experiencia grupal única</span></div>
+      </div>
+    </div>
+    <div class="grupos-grid reveal">
+      <div class="grupo-card">
+        <img src="https://i.ibb.co/chv4mkC7/IMG-20230321-110746-188.webp" alt="Cerro Tres Picos grupo" />
+        <div class="grupo-card-body">
+          <div class="grupo-card-title" data-es="Cerro Tres Picos" data-en="Cerro Tres Picos">Cerro Tres Picos</div>
+          <div class="grupo-card-text" data-es="La cumbre más alta de la provincia de Buenos Aires. Ideal para grupos que quieren su primer gran desafío." data-en="The highest peak in Buenos Aires province. Perfect for groups seeking their first big challenge.">La cumbre más alta de la provincia de Buenos Aires. Ideal para grupos que quieren su primer gran desafío.</div>
+        </div>
+      </div>
+      <div class="grupo-card">
+        <img src="https://images.unsplash.com/photo-1522163182402-834f871fd851?w=800&q=80" alt="Sierra La Vigilancia grupo" />
+        <div class="grupo-card-body">
+          <div class="grupo-card-title" data-es="Sierra La Vigilancia" data-en="Sierra La Vigilancia">Sierra La Vigilancia</div>
+          <div class="grupo-card-text" data-es="Sierras bonaerenses a pocas horas de Buenos Aires. La aventura más accesible para tu comunidad." data-en="Buenos Aires highlands just hours from the city. The most accessible adventure for your community.">Sierras bonaerenses a pocas horas de Buenos Aires. La aventura más accesible para tu comunidad.</div>
+        </div>
+      </div>
+    </div>
+    <div class="grupos-cta reveal">
+      <div>
+        <div class="grupos-cta-text" data-es='"Se entrena en grupo. Se recuerda para siempre."' data-en='"Train together. Remember forever."'>"Se entrena en grupo. Se recuerda para siempre."</div>
+        <div class="grupos-cta-sub" data-es="Consultanos por tu grupo — armamos la experiencia a medida." data-en="Contact us for your group — we tailor the experience.">Consultanos por tu grupo — armamos la experiencia a medida.</div>
+      </div>
+      <a href="#contacto" class="btn-primary" data-es="Consultar para mi grupo" data-en="Inquire for my group">Consultar para mi grupo</a>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <p class="quote-text" data-es='"La montaña no te da lo que buscás. Te da lo que necesitás."' data-en='"The mountain doesn\'t give you what you seek. It gives you what you need."'>"La montaña no te da lo que buscás. Te da lo que necesitás."</p>
+          <div class="quote-author" data-es="— Summit, Guías de Montaña" data-en="— Summit, Mountain Guides">— Summit, Guías de Montaña</div>
+</div>
+
+<!-- CONTACT -->
+<section>
+  <div id="contacto">
+    <div class="contact-info reveal">
+      <div class="section-tag" data-es="Contacto" data-en="Contact">Contacto</div>
+      <h2 class="section-title" data-es="Elegí tu programa.<br><em>O creamos el tuyo.</em>" data-en="Choose your program.<br><em>Or we create yours.</em>">Elegí tu programa.<br><em>O creamos el tuyo.</em></h2>
+      <p class="section-body" data-es="Tenemos programas ya armados listos para salir. También podemos diseñar una experiencia completamente a tu medida." data-en="We have ready-made programs set to go. We can also design a fully tailored experience for you.">
+        Tenemos programas ya armados listos para salir. También podemos diseñar una experiencia completamente a tu medida.
+      </p>
+      <div style="margin-top:1.8rem; display:flex; flex-direction:column; gap:.8rem;">
+        <div style="padding:1rem 1.3rem; border-left:2px solid var(--gold); background:rgba(200,149,42,.05);">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:.95rem; font-weight:600; letter-spacing:.05em; color:var(--cream);" data-es="🧊 Trekking en Glaciar Perito Moreno" data-en="🧊 Perito Moreno Glacier Trek">🧊 Trekking en Glaciar Perito Moreno</div>
+          <div style="font-size:.82rem; color:var(--sand); margin-top:.3rem;" data-es="Programa completo con logística desde Buenos Aires." data-en="Full program with logistics from Buenos Aires.">Programa completo con logística desde Buenos Aires.</div>
+        </div>
+        <div style="padding:1rem 1.3rem; border-left:2px solid var(--gold); background:rgba(200,149,42,.05);">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:.95rem; font-weight:600; letter-spacing:.05em; color:var(--cream);" data-es="⛰️ Cerro Tres Picos" data-en="⛰️ Cerro Tres Picos">⛰️ Cerro Tres Picos</div>
+          <div style="font-size:.82rem; color:var(--sand); margin-top:.3rem;" data-es="La cumbre más alta de Buenos Aires. Ideal para grupos." data-en="The highest peak in Buenos Aires. Perfect for groups.">La cumbre más alta de Buenos Aires. Ideal para grupos.</div>
+        </div>
+        <div style="padding:1rem 1.3rem; border-left:2px solid var(--gold); background:rgba(200,149,42,.05);">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:.95rem; font-weight:600; letter-spacing:.05em; color:var(--cream);" data-es="🏔️ Sierra La Vigilancia" data-en="🏔️ Sierra La Vigilancia">🏔️ Sierra La Vigilancia</div>
+          <div style="font-size:.82rem; color:var(--sand); margin-top:.3rem;" data-es="A pocas horas de Buenos Aires. Perfecto para iniciarse." data-en="Just hours from Buenos Aires. Perfect for beginners.">A pocas horas de Buenos Aires. Perfecto para iniciarse.</div>
+        </div>
+        <div style="padding:1rem 1.3rem; border-left:2px solid rgba(107,99,85,.5); background:rgba(107,99,85,.05);">
+          <div style="font-family:'Barlow Condensed',sans-serif; font-size:.95rem; font-weight:600; letter-spacing:.05em; color:var(--cream);" data-es="✨ Experiencia personalizada" data-en="✨ Custom experience">✨ Experiencia personalizada</div>
+          <div style="font-size:.82rem; color:var(--sand); margin-top:.3rem;" data-es="Contanos tu idea y la hacemos realidad." data-en="Tell us your idea and we'll make it happen.">Contanos tu idea y la hacemos realidad.</div>
+        </div>
+      </div>
+      <div class="contact-details" style="margin-top:2rem;">
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📱</div>
+          <div class="contact-detail-text">
+            <strong data-es="WhatsApp / Teléfono" data-en="WhatsApp / Phone">WhatsApp / Teléfono</strong>
+            <span>+54 9 11 6646 9527</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📸</div>
+          <div class="contact-detail-text">
+            <strong>Instagram</strong>
+            <a href="https://instagram.com/mati.torres.mg" target="_blank" style="color:var(--sand); text-decoration:none;">@mati.torres.mg</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">🌍</div>
+          <div class="contact-detail-text">
+            <strong data-es="Idiomas" data-en="Languages">Idiomas</strong>
+            <span>Español · English</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div class="form-row">
+        <div class="form-field">
+          <label data-es="Nombre" data-en="Name">Nombre</label>
+          <input type="text" placeholder="Tu nombre" data-placeholder-es="Tu nombre" data-placeholder-en="Your name" />
+        </div>
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" placeholder="tu@email.com" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label data-es="Experiencia de interés" data-en="Experience of interest">Experiencia de interés</label>
+        <select>
+          <option value="" data-es="Seleccioná una opción" data-en="Select an option">Seleccioná una opción</option>
+          <option data-es="Senderismo & Trekking" data-en="Hiking & Trekking">Senderismo & Trekking</option>
+          <option data-es="Escalada" data-en="Climbing">Escalada</option>
+          <option data-es="Trail Running" data-en="Trail Running">Trail Running</option>
+          <option data-es="Glaciares" data-en="Glacier">Glaciares</option>
+          <option data-es="Salida grupal" data-en="Group outing">Salida grupal</option>
+          <option data-es="Experiencia personalizada" data-en="Custom experience">Experiencia personalizada</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label data-es="Nivel de experiencia" data-en="Experience level">Nivel de experiencia</label>
+          <select>
+            <option data-es="Principiante" data-en="Beginner">Principiante</option>
+            <option data-es="Intermedio" data-en="Intermediate">Intermedio</option>
+            <option data-es="Avanzado" data-en="Advanced">Avanzado</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label data-es="Cantidad de personas" data-en="Number of people">Cantidad de personas</label>
+          <input type="number" min="1" max="50" placeholder="1" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label data-es="Mensaje" data-en="Message">Mensaje</label>
+        <textarea rows="4" placeholder="Contanos sobre tu experiencia ideal..." data-placeholder-es="Contanos sobre tu experiencia ideal..." data-placeholder-en="Tell us about your ideal experience..."></textarea>
+      </div>
+      <div class="form-submit">
+        <button class="btn-primary" data-es="Enviar Consulta" data-en="Send Inquiry">Enviar Consulta</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SUMMIT</div>
+  <div class="footer-copy" data-es="© 2026 Summit Argentina. Todos los derechos reservados." data-en="© 2026 Summit Argentina. All rights reserved.">© 2026 Summit Argentina. Todos los derechos reservados.</div>
+  <div class="footer-social">
+    <a href="#">Instagram</a>
+    <a href="#">Facebook</a>
+    <a href="#">WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+
+  let lang = 'es';
+  function toggleLang() {
+    lang = lang === 'es' ? 'en' : 'es';
+    document.querySelectorAll('[data-es]').forEach(el => {
+      const text = el.getAttribute(`data-${lang}`);
+      if (text) el.innerHTML = text;
+    });
+    document.querySelectorAll('[data-placeholder-es]').forEach(el => {
+      el.placeholder = el.getAttribute(`data-placeholder-${lang}`);
+    });
+    document.querySelector('.nav-lang').textContent = lang === 'es' ? 'EN / ES' : 'ES / EN';
+  }
+</script>
+</body>
+</html>
